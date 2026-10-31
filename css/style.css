@@ -1,8 +1,3 @@
-/* =========================================================
-   TORRA NOBRE — Design system e layout
-   HTML/CSS/JS vanilla, sem dependências de runtime.
-========================================================= */
-
 :root {
   color-scheme: light;
   --ink: #171511;
@@ -101,10 +96,15 @@ button, a { -webkit-tap-highlight-color: transparent; }
   border-bottom: 1px solid rgba(255,255,255,.18); color: white;
   transition: background 300ms ease, border-color 300ms ease;
 }
-.site-header.is-scrolled {
-  position: fixed; background: rgba(23,21,17,.92); border-color: var(--line-dark);
+.site-header.is-scrolled { position: fixed; border-color: var(--line-dark); }
+/* O fundo com blur fica num pseudo-elemento. Assim o próprio cabeçalho não tem
+   backdrop-filter, que quebraria o drawer mobile (position: fixed filho). */
+.site-header::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: rgba(23,21,17,.92); opacity: 0; transition: opacity 300ms ease;
   backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
 }
+.site-header.is-scrolled::before { opacity: 1; }
 .header-inner { min-height: 5.75rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
 .brand { display: inline-flex; align-items: center; gap: .65rem; flex-shrink: 0; text-decoration: none; }
 .brand-mark { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border: 1px solid var(--accent); border-radius: 50%; color: var(--accent-bright); font: 1.1rem var(--serif); }
@@ -388,3 +388,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .image-panel[data-reveal] { clip-path: none !important; }
   .marquee-track { animation: none; }
 }
+
+/* Com o drawer aberto, a barra de progresso não deve aparecer por cima dele. */
+body.menu-open .scroll-progress { display: none; }
